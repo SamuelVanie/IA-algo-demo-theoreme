@@ -107,7 +107,24 @@ class AppTest {
     @Disabled
     @Test
     void checkMoveNotInwards() {
-        System.out.println(moveNotInwards(segmentSentence("A(B(!C&D))")));
+        List<String> list = new ArrayList<String>();
+        list.add("(");
+        list.add("(");
+        list.add("A");
+        list.add("|");
+        list.add("B");
+        list.add(")");
+        list.add("|");
+        list.add("(");
+        list.add("(");
+        list.add("!");
+        list.add("C");
+        list.add(")");
+        list.add("&");
+        list.add("D");
+        list.add(")");
+        list.add(")");
+        System.out.println(moveNotInwards(list));
     }
 
     @Disabled
@@ -116,9 +133,46 @@ class AppTest {
         System.out.println(distributeOrOverAnd(segmentSentence("A|(B(!C&D))")));
     }
 
+    @Disabled
     @Test
     void checkRemoveInvalidParenthesis(){
         System.out.println(eliminateInvalidParenthesis(segmentSentence(")A|(B(!C&D))")));
+    }
+
+    @Disabled
+    @Test
+    void checkProcessOperand(){
+        System.out.println(processOperand(segmentSentence("A(B(!C&D))")));
+    }
+
+    @Disabled
+    @Test
+    void checkSplitAround(){
+        System.out.println(splitAroundAnd(segmentSentence("A(B(!C&D))")));
+    }
+
+    @Disabled
+    @Test
+    void checkCnf(){
+        System.out.println(cNF(induceParenthesis(segmentSentence("A|B|!C&D"))));
+    }
+
+    @Disabled
+    @Test
+    void checkClauseMap(){
+        System.out.println(clauseMap(segmentSentence("A|B|!C&D")));
+    }
+
+    @Disabled
+    @Test
+    void checkIfResolve(){
+        System.out.println(resolve(segmentSentence("A|B|!C&D"), 1));
+    }
+
+    @Disabled
+    @Test
+    void checkVetTest(){
+        System.out.println(vetSentence(segmentSentence("A|B|!C&D")));
     }
 
 }

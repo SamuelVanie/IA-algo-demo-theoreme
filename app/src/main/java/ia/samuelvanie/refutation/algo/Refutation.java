@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.Scanner;
 import org.python.util.PythonInterpreter;
 import org.python.core.PyList;
-import org.python.core.PyTuple;
-import org.python.core.PyObject;
 import org.python.core.PyString;
 
 public class Refutation {
@@ -229,6 +227,7 @@ public class Refutation {
   }
 
   static public List<String> moveNotInwards(List<String> s){
+    s = new ArrayList<String>(s);
     List<String> pr = new ArrayList<String>();
     List<String> B = new ArrayList<String>();
     List<String> tmp = new ArrayList<String>();
@@ -298,28 +297,19 @@ public class Refutation {
 
 
   static public List<String> eliminateInvalidParenthesis(List<String> s){
-    List<String> pr = new ArrayList<String>();
-    List<String> brackets = new ArrayList<String>();
-    List<String> content = new ArrayList<String>();
-    
-    for(int i=0; i<s.size(); i++){
-      if(s.get(i).equals("(")){
-        for(String k:pr){content.add(k);}
-        brackets.add("(");
-        pr.clear();
-      }else if(s.get(i).equals(")") && content.size()>0){
-        if(literalIsNotProtected(pr)){
-          pr.add(0, "(");
-          pr.add(pr.size()-1, ")"); 
-        }
-        pr.add(0, content.get(content.size()-1));
-        brackets.remove(brackets.get(brackets.size()-1));
-        content.remove(content.get(content.size()-1));
-      }else{
-        pr.add(s.get(i));
-      }
-    }
-    return pr;
+    try(PythonInterpreter py = new PythonInterpreter()){
+      py.exec("import sys");
+      py.exec("import os");
+      py.set("src", new PyString("src"));
+      py.set("main", new PyString("main"));
+      py.set("resources", new PyString("resources"));
+      py.exec("sys.path.append(os.path.join(os.getcwd(),src,main,resources))");
+      py.exec("from refutation import eliminate_invalid_parenthesis");
+      py.set("s", new PyList(s));
+      py.exec("result = eliminate_invalid_parenthesis(s)");
+      List<String> result = new PyList(py.get("result"));
+      return result;
+    }  
   }
 
   static public List<String> processOperand(List<String> s){
@@ -368,7 +358,7 @@ public class Refutation {
 
   static public List<String> cNF(List<String> s){
     s = elimineOperator(s, "=");
-    s = eliminateInvalidParenthesis(s);
+    s = eliminateInvalidParenthesis(s); 
     s = elimineOperator(s, ">");
     s = eliminateInvalidParenthesis(s);
     s = moveNotInwards(s);
@@ -455,7 +445,7 @@ public class Refutation {
     if (m) {
       System.out.println("Clauses <- L'ensemble des clauses dans leur forme normale (CNF)");
       System.out.println(String.format("Clauses: %s", clauses));
-      System.out.println("Nouvelle clauses <- %s");
+      System.out.println("Nouvelle clauses <- {}");
       System.out.println("Parcours de toutes les pairs de clause dans le dictionnaire");
     }
 
@@ -464,7 +454,7 @@ public class Refutation {
         for (int j=i+1; j<clause_map.size(); j++) {
           HashMap<String, Boolean> resolvent = new HashMap<String, Boolean>();
           for (String var:clause_map.get(i).keySet()) {
-            if(!clause_map.get(j).containsKey(var) || clause_map.get(j).get(var) == clause_map.get(i).get(var)){
+            if(!clause_map.get(j).containsKey(var) || clause_map.get(j).get(var).equals(clause_map.get(i).get(var))){
               resolvent.put(var, clause_map.get(i).get(var));
             } 
           }
@@ -478,7 +468,7 @@ public class Refutation {
             System.out.println(String.format("\t(%s) <- RESOLVE((%s), (%s))", resolvent, clause_map.get(i), clause_map.get(j)));
           }else{}
 
-          if(!Boolean.TRUE.equals(resolvent)){
+          if(Boolean.FALSE.equals(resolvent)){
             if(m){
               System.out.println("Si resolvent contient une clause vide: return True");
             }else{}
