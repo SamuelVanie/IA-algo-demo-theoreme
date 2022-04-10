@@ -412,6 +412,18 @@ public class Refutation {
     return true;
   }
 
+  static public List<String> convertToLogic(HashMap<String,Boolean> clause){
+    List<String> result = new ArrayList<String>();
+    for (Map.Entry<String,Boolean> entry : clause.entrySet()) {
+      if(entry.getValue()){
+        result.add("non " + entry.getKey());
+      }else{
+        result.add(entry.getKey());
+      } 
+    }
+    return result;
+  }
+
   static public boolean resolve(List<String> s, int debugActive){
     List<String> clause = new ArrayList<String>();
     List<String> clauses = new ArrayList<String>();
@@ -443,10 +455,10 @@ public class Refutation {
     List<HashMap<String, Boolean>> new_clause_map = new ArrayList<HashMap<String, Boolean>>();
 
     if (m) {
-      System.out.println("Clauses <- L'ensemble des clauses dans leur forme normale (CNF)");
+      System.out.println("On converti l'ensemble des clauses dans leur forme normale (CNF)");
       System.out.println(String.format("Clauses: %s", clauses));
-      System.out.println("Nouvelle clauses <- {}");
-      System.out.println("Parcours de toutes les pairs de clause dans le dictionnaire");
+      System.out.println("Nouvelles clauses <- {}");
+      System.out.println("Parcours de toutes les pairs de clause de la base de connaissance");
     }
 
     while (true) {
@@ -465,12 +477,12 @@ public class Refutation {
           }
 
           if(m){
-            System.out.println(String.format("\t(%s) <- RESOLVE((%s), (%s))", resolvent, clause_map.get(i), clause_map.get(j)));
+            System.out.println(String.format("\t(%s) est obtenu à partir de %s et %s", convertToLogic(resolvent), convertToLogic(clause_map.get(i)), convertToLogic(clause_map.get(j))));
           }else{}
 
           if(resolvent.isEmpty()){
             if(m){
-              System.out.println("Si resolvent contient une clause vide: return True");
+              System.out.println("On obtient un ensemble vide de clause, donc la propriété est vraie");
             }else{}
             return true;
           }
@@ -479,12 +491,12 @@ public class Refutation {
             new_clause_map.add(resolvent);
           }else{}
           if(m){
-            System.out.println("\tNouvelle clause <- nouvelle clause u resolvent");
+            System.out.println(String.format("\tOn ajoute la clause %s obtenue à notre ensemble de clauses", convertToLogic(resolvent)));
           }else{}
         }
       }
       if(all(clause_map, new_clause_map)){
-        if(m){System.out.println("If nouvelle liste clause inclu dans liste de clause : return False");}else{}
+        if(m){System.out.println("Verifions si le nouvel ensemble de clauses obtenues est identique ou inclu dans celui de la base connaissance, si oui alors la propriété qu'on cherche à vérifier est fausse");}else{}
         return false;
       } 
       for(HashMap<String,Boolean> cl: new_clause_map){
@@ -493,7 +505,7 @@ public class Refutation {
         }
       }
       if(m){
-        System.out.println("clauses <- clauses + nouvelles clauses");
+        System.out.println("On ajoute le nouvelle ensemble de clause obtenu à la base de connaissance");
       }else{
 
       }
