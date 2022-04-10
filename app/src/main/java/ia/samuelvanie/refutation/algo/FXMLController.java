@@ -1,5 +1,6 @@
 package ia.samuelvanie.refutation.algo;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -28,7 +29,7 @@ public class FXMLController {
     private ImageView imgView;
 
     public void quit(ActionEvent event) {
-        System.out.println("QUIT");
+        Platform.exit();
     }
 
     public void ancien(ActionEvent event) {
