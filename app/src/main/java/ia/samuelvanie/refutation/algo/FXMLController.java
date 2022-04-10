@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import static ia.samuelvanie.refutation.algo.Refutation.solve;
 
@@ -22,16 +24,22 @@ public class FXMLController {
     @FXML
     private TextArea textArea;
 
+    @FXML
+    private ImageView imgView;
+
     public void quit(ActionEvent event) {
         System.out.println("QUIT");
     }
 
     public void ancien(ActionEvent event) {
+        imgView.setImage(null);
         fetchResultFile();
     }
 
     public void aide(ActionEvent event) {
-        System.out.println("AIDE");        
+        textArea.clear();
+        Image img = new Image(getClass().getClassLoader().getResourceAsStream("help.png"));
+        imgView.setImage(img);
     }
 
     public void fetchResultFile(){
@@ -49,6 +57,7 @@ public class FXMLController {
     }
 
     public void nouveau(ActionEvent event) {
+        imgView.setImage(null);
         TextInputDialog textInput = new TextInputDialog();
         textInput.setTitle("Resoudre un nouveau problème");
 
@@ -82,11 +91,16 @@ public class FXMLController {
                 textInput.close();
             }
 
-            textInput.getDialogPane().setContentText("Voulez-vous afficher la trace du raisonnement ?");
+            textInput.getDialogPane().setContentText("Voulez-vous afficher la trace du raisonnement ? (OUI:O) ou (NON:N)");
             result = textInput.showAndWait();
             input = textInput.getEditor();
             if (input.getText() != null && input.getText().toString().length() != 0) {
-                Integer m = Integer.parseInt(input.getText().toString().split(" ")[0]);
+                String answer = input.getText().toString().split(" ")[0];
+                Integer m;
+                if(answer.equals("O") || answer.equals("o"))
+                    m = 1;
+                else
+                    m = 0;
                 solve(m, clauses, query);
                 fetchResultFile();
             }else{

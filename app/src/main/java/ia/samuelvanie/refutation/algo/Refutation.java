@@ -462,6 +462,7 @@ public class Refutation {
 
       if (m) {
         out.println("On converti l'ensemble des clauses dans leur forme normale (CNF)");
+        out.println("Ajout de la négation de la clause à vérifier");
         out.println(String.format("Clauses: %s", clauses));
         out.println("Nouvelles clauses <- {}");
         out.println("Parcours de toutes les paires de clause de la base de connaissance");
@@ -487,9 +488,7 @@ public class Refutation {
             }else{}
 
             if(resolvent.isEmpty()){
-              if(m){
                 out.println("On obtient un ensemble vide de clause, donc la propriété est vraie");
-              }else{}
               out.close();
               return true;
             }
@@ -503,7 +502,7 @@ public class Refutation {
           }
         }
         if(all(clause_map, new_clause_map)){
-          if(m){out.println("Verifions si le nouvel ensemble de clauses obtenues est identique ou inclu dans celui de la base connaissance, si oui alors la propriété qu'on cherche à vérifier est fausse");}else{}
+          out.println("Verifions si le nouvel ensemble de clauses obtenues est identique ou inclu dans celui de la base connaissance, si oui alors la propriété qu'on cherche à vérifier est fausse");
           out.close();
           return false;
         } 

@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="588.0" prefWidth="863.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ia.samuelvanie.refutation.algo.FXMLController">
    <children>
       <ScrollPane hbarPolicy="NEVER" layoutX="20.0" layoutY="41.0" pannable="true" prefWidth="676.0">
@@ -26,6 +25,7 @@
             </TextArea>
          </content>
       </ScrollPane>
+      <ImageView fx:id="imgView" fitHeight="515.0" fitWidth="676.0" layoutX="21.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fitHeight="460.0" fitWidth="472.0" layoutX="109.0" layoutY="74.0" opacity="0.12">
          <image>
             <Image url="@SvLOGICSOLVER-logos_transparent.png" />

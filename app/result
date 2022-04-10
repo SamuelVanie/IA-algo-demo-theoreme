@@ -1,4 +1,5 @@
 On converti l'ensemble des clauses dans leur forme normale (CNF)
+Ajout de la négation de la clause à vérifier
 Clauses: [(!P|O), P, (!O)]
 Nouvelles clauses <- {}
 Parcours de toutes les paires de clause de la base de connaissance
