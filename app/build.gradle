@@ -25,6 +25,10 @@ dependencies {
     implementation group: 'org.python', name: 'jython-standalone', version: '2.7.2'
 }
 
+run{
+    standardInput = System.in
+}
+
 application {
     // Define the main class for the application.
     mainClass = 'ia.samuelvanie.refutation.algo.App'

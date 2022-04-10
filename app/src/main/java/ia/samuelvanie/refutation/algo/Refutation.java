@@ -468,7 +468,7 @@ public class Refutation {
             System.out.println(String.format("\t(%s) <- RESOLVE((%s), (%s))", resolvent, clause_map.get(i), clause_map.get(j)));
           }else{}
 
-          if(Boolean.FALSE.equals(resolvent)){
+          if(resolvent.isEmpty()){
             if(m){
               System.out.println("Si resolvent contient une clause vide: return True");
             }else{}
@@ -520,6 +520,7 @@ public class Refutation {
     }
 
     String query = sc.nextLine().split(" ")[0];
+    sc.close();
 
     return new ArrayList<Object>(){
       {
@@ -552,7 +553,7 @@ public class Refutation {
       oppose.add(k);
     }
 
-    List<String> old = oppose;
+    List<String> old = new ArrayList<String>(oppose);
     if(baseDeConnaissance.size() > 0){
       for (String k : baseDeConnaissance) {
         oppose.add(k);
