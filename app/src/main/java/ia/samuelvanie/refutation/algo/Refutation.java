@@ -1,5 +1,7 @@
 package ia.samuelvanie.refutation.algo;
 
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -429,125 +431,107 @@ public class Refutation {
     List<String> clauses = new ArrayList<String>();
     List<HashMap<String, Boolean>> clause_map = new ArrayList<HashMap<String, Boolean>>();
     boolean m;
-    if(debugActive>=1){m=true;}else{m=false;}
+
+    try {
+      FileOutputStream fos = new FileOutputStream("result");
+      PrintStream out = new PrintStream(fos);
+      if(debugActive>=1){m=true;}else{m=false;}
 
 
-    for(String k:s){
-      String complete="";
-      if(k.equals("&")){
-        for(String v:clause){
-          complete += v;
+      for(String k:s){
+        String complete="";
+        if(k.equals("&")){
+          for(String v:clause){
+            complete += v;
+          }
+          clauses.add(complete);
+          clause_map.add(clauseMap(clause));
+          clause.clear();
+        }else{
+          clause.add(k);
         }
-        clauses.add(complete);
-        clause_map.add(clauseMap(clause));
-        clause.clear();
-      }else{
-        clause.add(k);
       }
-    }
-    String complete = "";
-    for (String v : clause) {
-      complete += v;
-    }
-    clauses.add(complete);
-    clause_map.add(clauseMap(clause));
-    
-    List<HashMap<String, Boolean>> new_clause_map = new ArrayList<HashMap<String, Boolean>>();
+      String complete = "";
+      for (String v : clause) {
+        complete += v;
+      }
+      clauses.add(complete);
+      clause_map.add(clauseMap(clause));
+      
+      List<HashMap<String, Boolean>> new_clause_map = new ArrayList<HashMap<String, Boolean>>();
 
-    if (m) {
-      System.out.println("On converti l'ensemble des clauses dans leur forme normale (CNF)");
-      System.out.println(String.format("Clauses: %s", clauses));
-      System.out.println("Nouvelles clauses <- {}");
-      System.out.println("Parcours de toutes les pairs de clause de la base de connaissance");
-    }
+      if (m) {
+        out.println("On converti l'ensemble des clauses dans leur forme normale (CNF)");
+        out.println(String.format("Clauses: %s", clauses));
+        out.println("Nouvelles clauses <- {}");
+        out.println("Parcours de toutes les paires de clause de la base de connaissance");
+      }
 
-    while (true) {
-      for (int i=0; i<clause_map.size(); i++) {
-        for (int j=i+1; j<clause_map.size(); j++) {
-          HashMap<String, Boolean> resolvent = new HashMap<String, Boolean>();
-          for (String var:clause_map.get(i).keySet()) {
-            if(!clause_map.get(j).containsKey(var) || clause_map.get(j).get(var).equals(clause_map.get(i).get(var))){
-              resolvent.put(var, clause_map.get(i).get(var));
-            } 
-          }
+      while (true) {
+        for (int i=0; i<clause_map.size(); i++) {
+          for (int j=i+1; j<clause_map.size(); j++) {
+            HashMap<String, Boolean> resolvent = new HashMap<String, Boolean>();
+            for (String var:clause_map.get(i).keySet()) {
+              if(!clause_map.get(j).containsKey(var) || clause_map.get(j).get(var).equals(clause_map.get(i).get(var))){
+                resolvent.put(var, clause_map.get(i).get(var));
+              } 
+            }
 
-          for (String var : clause_map.get(j).keySet()) {
-            if(!clause_map.get(i).containsKey(var))
-              resolvent.put(var, clause_map.get(j).get(var));
-          }
+            for (String var : clause_map.get(j).keySet()) {
+              if(!clause_map.get(i).containsKey(var))
+                resolvent.put(var, clause_map.get(j).get(var));
+            }
 
-          if(m){
-            System.out.println(String.format("\t(%s) est obtenu à partir de %s et %s", convertToLogic(resolvent), convertToLogic(clause_map.get(i)), convertToLogic(clause_map.get(j))));
-          }else{}
-
-          if(resolvent.isEmpty()){
             if(m){
-              System.out.println("On obtient un ensemble vide de clause, donc la propriété est vraie");
+              out.println(String.format("\t(%s) est obtenu à partir de %s et %s", convertToLogic(resolvent), convertToLogic(clause_map.get(i)), convertToLogic(clause_map.get(j))));
             }else{}
-            return true;
+
+            if(resolvent.isEmpty()){
+              if(m){
+                out.println("On obtient un ensemble vide de clause, donc la propriété est vraie");
+              }else{}
+              out.close();
+              return true;
+            }
+
+            if(!new_clause_map.contains(resolvent)){
+              new_clause_map.add(resolvent);
+            }else{}
+            if(m){
+              out.println(String.format("\tOn ajoute la clause %s obtenue à notre ensemble de clauses", convertToLogic(resolvent)));
+            }else{}
           }
-
-          if(!new_clause_map.contains(resolvent)){
-            new_clause_map.add(resolvent);
-          }else{}
-          if(m){
-            System.out.println(String.format("\tOn ajoute la clause %s obtenue à notre ensemble de clauses", convertToLogic(resolvent)));
-          }else{}
         }
-      }
-      if(all(clause_map, new_clause_map)){
-        if(m){System.out.println("Verifions si le nouvel ensemble de clauses obtenues est identique ou inclu dans celui de la base connaissance, si oui alors la propriété qu'on cherche à vérifier est fausse");}else{}
-        return false;
-      } 
-      for(HashMap<String,Boolean> cl: new_clause_map){
-        if(!clause_map.contains(cl)){
-          clause_map.add(cl);
+        if(all(clause_map, new_clause_map)){
+          if(m){out.println("Verifions si le nouvel ensemble de clauses obtenues est identique ou inclu dans celui de la base connaissance, si oui alors la propriété qu'on cherche à vérifier est fausse");}else{}
+          out.close();
+          return false;
+        } 
+        for(HashMap<String,Boolean> cl: new_clause_map){
+          if(!clause_map.contains(cl)){
+            clause_map.add(cl);
+          }
         }
+        if(m){
+          out.println("On ajoute le nouvelle ensemble de clause obtenu à la base de connaissance");
+        }else{}
       }
-      if(m){
-        System.out.println("On ajoute le nouvelle ensemble de clause obtenu à la base de connaissance");
-      }else{
-
-      }
+    } catch(Exception e){
+      return false;
     }
+
+    
   }
 
   static public List<String> vetSentence(List<String> s){
     s = induceParenthesis(s); 
     s = eliminateInvalidParenthesis(s);
     return cNF(s);
+
   }
   
-  static public ArrayList<Object> getInput(){
-    Scanner sc = new Scanner(System.in);
-    String[] elements = sc.nextLine().split(" ");
-    if(elements.length > 2){System.out.println("Vous avez entré un nombre incorrect d'arguments");System.exit(1);}
-    Integer n = Integer.parseInt(elements[0]);
-    Integer m = Integer.parseInt(elements[1]);
 
-    List<String> sentences = new ArrayList<String>();
-    while(n>0){
-      sentences.add(sc.nextLine().split(" ")[0]);
-      n-=1;
-    }
-
-    String query = sc.nextLine().split(" ")[0];
-    sc.close();
-
-    return new ArrayList<Object>(){
-      {
-        add(m); 
-        add(sentences); 
-        add(query);
-      }
-    };
-  }
-
-  static public int solve(){
-    List<Object> result = getInput();
-    Integer m = (Integer)result.get(0);
-    List<String> sentences = (List<String>)result.get(1);
-    String query = (String)result.get(2);
+  static public int solve(Integer m, List<String> sentences, String query){
 
     List<String> baseDeConnaissance = new ArrayList<String>();
     for (String sentence : sentences){

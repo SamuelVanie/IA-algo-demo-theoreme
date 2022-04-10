@@ -1,46 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="506.0" prefWidth="695.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ia.samuelvanie.refutation.algo.FXMLController">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="588.0" prefWidth="863.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ia.samuelvanie.refutation.algo.FXMLController">
    <children>
-      <Pane layoutX="26.0" layoutY="45.0" prefHeight="438.0" prefWidth="534.0">
+      <ScrollPane hbarPolicy="NEVER" layoutX="20.0" layoutY="41.0" pannable="true" prefWidth="676.0">
+         <cursor>
+            <Cursor fx:constant="V_RESIZE" />
+         </cursor>
+         <content>
+            <TextArea fx:id="textArea" editable="false" prefHeight="513.0" prefWidth="675.0" wrapText="true">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </TextArea>
+         </content>
+      </ScrollPane>
+      <ImageView fitHeight="460.0" fitWidth="472.0" layoutX="109.0" layoutY="74.0" opacity="0.12">
+         <image>
+            <Image url="@SvLOGICSOLVER-logos_transparent.png" />
+         </image>
+      </ImageView>
+      <VBox layoutX="743.0" layoutY="166.0" prefHeight="256.0" prefWidth="100.0">
          <children>
-            <ImageView fitHeight="339.0" fitWidth="348.0" layoutX="92.0" layoutY="13.0" opacity="0.12">
-               <image>
-                  <Image url="@SvLOGICSOLVER-logos_transparent.png" />
-               </image>
-            </ImageView>
-            <Label layoutX="-6.0" layoutY="-4.0" prefHeight="366.0" prefWidth="542.0" style="-fx-border-style: solid; -fx-border-width: 3; -fx-border-radius: 5; -fx-label-padding: 20;" />
-            <Label layoutX="50.0" layoutY="383.0" prefHeight="38.0" prefWidth="269.0" style="-fx-border-width: 3; -fx-border-style: solid; -fx-border-radius: 3; -fx-label-padding: 7;" text="Votre reponse" />
-            <Button layoutX="370.0" layoutY="383.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="89.0" text="VALIDER" />
-         </children>
-      </Pane>
-      <VBox layoutX="573.0" layoutY="102.0" prefHeight="256.0" prefWidth="100.0">
-         <children>
-            <Button mnemonicParsing="false" prefHeight="53.0" prefWidth="100.0" text="NOUVEAU">
+            <Button fx:id="btnNouveau" mnemonicParsing="false" onAction="#nouveau" prefHeight="53.0" prefWidth="100.0" text="NOUVEAU">
                <VBox.margin>
                   <Insets bottom="15.0" />
                </VBox.margin>
             </Button>
-            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="100.0" text="ANCIEN">
+            <Button fx:id="btnAncien" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#ancien" prefHeight="53.0" prefWidth="100.0" text="ANCIEN">
                <VBox.margin>
                   <Insets bottom="15.0" />
                </VBox.margin>
             </Button>
-            <Button layoutX="10.0" layoutY="63.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="100.0" text="AIDE">
+            <Button fx:id="btnAide" layoutX="10.0" layoutY="63.0" mnemonicParsing="false" onAction="#aide" prefHeight="53.0" prefWidth="100.0" text="AIDE">
                <VBox.margin>
                   <Insets bottom="15.0" />
                </VBox.margin>
             </Button>
-            <Button layoutX="10.0" layoutY="116.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="100.0" text="QUITTER">
+            <Button fx:id="btnQuit" layoutX="10.0" layoutY="116.0" mnemonicParsing="false" onAction="#quit" prefHeight="53.0" prefWidth="100.0" text="QUITTER">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
