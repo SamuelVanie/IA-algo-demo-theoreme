@@ -48,6 +48,7 @@ public class FXMLController {
             FileInputStream fis = new FileInputStream("result");
             Scanner sc = new Scanner(fis);
             List<String> text = new ArrayList<String>();
+            textArea.clear();
             while(sc.hasNext()){
                 textArea.setText(textArea.getText() + "\n" + sc.nextLine());
             }

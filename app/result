@@ -1,22 +1,11 @@
 On converti l'ensemble des clauses dans leur forme normale (CNF)
 Ajout de la négation de la clause à vérifier
-Clauses: [(!P|O), P, (!O)]
+Clauses: [(!PlumesPerdrix|OiseauPerdrix), PlumesPerdrix, (!PlumesPerdrix)]
 Nouvelles clauses <- {}
 Parcours de toutes les paires de clause de la base de connaissance
-	([O]) est obtenu à partir de [non P, O] et [P]
-	On ajoute la clause [O] obtenue à notre ensemble de clauses
-	([non P]) est obtenu à partir de [non P, O] et [non O]
-	On ajoute la clause [non P] obtenue à notre ensemble de clauses
-	([P, non O]) est obtenu à partir de [P] et [non O]
-	On ajoute la clause [P, non O] obtenue à notre ensemble de clauses
-On ajoute le nouvelle ensemble de clause obtenu à la base de connaissance
-	([O]) est obtenu à partir de [non P, O] et [P]
-	On ajoute la clause [O] obtenue à notre ensemble de clauses
-	([non P]) est obtenu à partir de [non P, O] et [non O]
-	On ajoute la clause [non P] obtenue à notre ensemble de clauses
-	([non P, O]) est obtenu à partir de [non P, O] et [O]
-	On ajoute la clause [non P, O] obtenue à notre ensemble de clauses
-	([non P, O]) est obtenu à partir de [non P, O] et [non P]
-	On ajoute la clause [non P, O] obtenue à notre ensemble de clauses
-	([]) est obtenu à partir de [non P, O] et [P, non O]
+	([OiseauPerdrix]) est obtenu à partir de [OiseauPerdrix, non PlumesPerdrix] et [PlumesPerdrix]
+	On ajoute la clause [OiseauPerdrix] obtenue à notre ensemble de clauses
+	([OiseauPerdrix, non PlumesPerdrix]) est obtenu à partir de [OiseauPerdrix, non PlumesPerdrix] et [non PlumesPerdrix]
+	On ajoute la clause [OiseauPerdrix, non PlumesPerdrix] obtenue à notre ensemble de clauses
+	([]) est obtenu à partir de [PlumesPerdrix] et [non PlumesPerdrix]
 On obtient un ensemble vide de clause, donc la propriété est vraie

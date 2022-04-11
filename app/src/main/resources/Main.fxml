@@ -1,37 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="588.0" prefWidth="863.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ia.samuelvanie.refutation.algo.FXMLController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="605.0" prefWidth="932.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ia.samuelvanie.refutation.algo.FXMLController">
    <children>
-      <ScrollPane hbarPolicy="NEVER" layoutX="20.0" layoutY="41.0" pannable="true" prefWidth="676.0">
-         <cursor>
-            <Cursor fx:constant="V_RESIZE" />
-         </cursor>
-         <content>
-            <TextArea fx:id="textArea" editable="false" prefHeight="513.0" prefWidth="675.0" wrapText="true">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </TextArea>
-         </content>
-      </ScrollPane>
-      <ImageView fx:id="imgView" fitHeight="515.0" fitWidth="676.0" layoutX="21.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fitHeight="460.0" fitWidth="472.0" layoutX="109.0" layoutY="74.0" opacity="0.12">
          <image>
             <Image url="@SvLOGICSOLVER-logos_transparent.png" />
          </image>
       </ImageView>
-      <VBox layoutX="743.0" layoutY="166.0" prefHeight="256.0" prefWidth="100.0">
+      <StackPane layoutX="40.0" layoutY="53.0">
+         <children>
+            <TextArea fx:id="textArea" editable="false" focusTraversable="false" pickOnBounds="false" prefHeight="528.0" prefWidth="722.0" scaleShape="false" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextArea>
+            <ImageView fx:id="imgView" fitHeight="515.0" fitWidth="676.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </StackPane>
+      <VBox layoutX="800.0" layoutY="170.0" prefHeight="256.0" prefWidth="100.0">
          <children>
             <Button fx:id="btnNouveau" mnemonicParsing="false" onAction="#nouveau" prefHeight="53.0" prefWidth="100.0" text="NOUVEAU">
                <VBox.margin>
@@ -55,5 +52,10 @@
             </Button>
          </children>
       </VBox>
+      <Text layoutX="808.0" layoutY="510.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SOLVEUR LOGIQUE BOOLEENNE" textAlignment="CENTER" wrappingWidth="84.13000106811523">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>
