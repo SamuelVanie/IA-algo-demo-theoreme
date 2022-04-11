@@ -7,10 +7,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
-import org.python.util.PythonInterpreter;
-import org.python.core.PyList;
-import org.python.core.PyString;
 
 public class Refutation {
   static final List<String> POSSIBLE_OPERATORS = Arrays.asList(new String[] { "!", "&", "|", ">", "=", "(", ")" });
@@ -20,14 +16,14 @@ public class Refutation {
   }
 
   static public List<String> tokenList(String s){
-  	List<String> liste = new ArrayList<String>();
+  	ArrayList<String> liste = new ArrayList<String>();
   	String arrayS[] = s.split("");
-  	liste = Arrays.asList(arrayS);
+  	liste = (ArrayList<String>)Arrays.asList(arrayS);
   	return liste;
   }
 
-  static public List<String> segmentSentence(String s) {
-    List<String> segmentedSentences = new ArrayList<String>();
+  static public ArrayList<String> segmentSentence(String s) {
+    ArrayList<String> segmentedSentences = new ArrayList<String>();
     int i = 0;
     int L = s.length();
     String literal;
@@ -51,7 +47,7 @@ public class Refutation {
     return segmentedSentences;
   }
 
-  static public Map<List<String>, Integer> forwardSlice(List<String> s, Integer index) {
+  static public Map<ArrayList<String>, Integer> forwardSlice(ArrayList<String> s, Integer index) {
     int balance = 0;
     int i = index;
 
@@ -59,18 +55,18 @@ public class Refutation {
       balance = s.get(i).equals("(") ? balance + 1
           : s.get(i).equals(")") ? balance-1 : balance;
       if (balance == 0 && !(s.get(i).equals("!"))) {
-        Map<List<String>, Integer> result = new HashMap<List<String>, Integer>();
-        result.put(s.subList(index, i + 1), Integer.valueOf(i));
+        Map<ArrayList<String>, Integer> result = new HashMap<ArrayList<String>, Integer>();
+        result.put(new ArrayList<String>(s.subList(index, i + 1)), Integer.valueOf(i));
         return result;
       }
       i += 1;
     }
 
-    return new HashMap<List<String>, Integer>();
+    return new HashMap<ArrayList<String>, Integer>();
 
   }
 
-  static public Map<List<String>, List<String>> backwardSlice(List<String> s) {
+  static public Map<ArrayList<String>, ArrayList<String>> backwardSlice(ArrayList<String> s) {
     int balance = 0;
     int L = s.size();
     int i = L - 1;
@@ -83,20 +79,20 @@ public class Refutation {
         } else {
           i -= 0;
         }
-        Map<List<String>, List<String>> result = new HashMap<List<String>, List<String>>();
-        result.put(s.subList(i, L), s.subList(0, i));
+        Map<ArrayList<String>, ArrayList<String>> result = new HashMap<ArrayList<String>, ArrayList<String>>();
+        result.put(new ArrayList<String>(s.subList(i, L)), new ArrayList<String>(s.subList(0, i)));
         return result;
       }
       i -= 1;
     }
 
-    return new HashMap<List<String>, List<String>>();
+    return new HashMap<ArrayList<String>, ArrayList<String>>();
   }
 
-  static public List<String> aroundUnaryOp(List<String> s, String op){
-    List<String> pr = new ArrayList<String>();
+  static public ArrayList<String> aroundUnaryOp(ArrayList<String> s, String op){
+    ArrayList<String> pr = new ArrayList<String>();
     int i=0;
-    List<String> sSlice;
+    ArrayList<String> sSlice;
     while (i < s.size()){
       if(s.get(i).equals(op)){
         i+=1;
@@ -115,16 +111,16 @@ public class Refutation {
     return pr;
   }
 
-  static public List<String> aroundBinaryOp(List<String> s, String op){
-    List<String> pr = new ArrayList<String>();
+  static public ArrayList<String> aroundBinaryOp(ArrayList<String> s, String op){
+    ArrayList<String> pr = new ArrayList<String>();
     int i = 0;
     while(i < s.size()){
       if(s.get(i).equals(op)){
-        List<String> A = backwardSlice(pr).keySet().stream().findFirst().get();
+        ArrayList<String> A = backwardSlice(pr).keySet().stream().findFirst().get();
         pr = backwardSlice(pr).values().stream().findFirst().get();
         A = aroundBinaryOp(A, op);
         i+=1;
-        List<String> sSlice = forwardSlice(s, i).keySet().stream().findFirst().get();
+        ArrayList<String> sSlice = forwardSlice(s, i).keySet().stream().findFirst().get();
         i = forwardSlice(s, i).values().stream().findFirst().get();
         sSlice = aroundBinaryOp(sSlice, op);
         pr.add("(");
@@ -140,7 +136,7 @@ public class Refutation {
     return pr;
   }
 
-  static public List<String> induceParenthesis(List<String> s){
+  static public ArrayList<String> induceParenthesis(ArrayList<String> s){
     s = aroundUnaryOp(s, "!");
     s = aroundBinaryOp(s, "&");
     s = aroundBinaryOp(s, "|");
@@ -149,7 +145,7 @@ public class Refutation {
     return s;
   }
 
-  static public boolean literalIsNotProtected(List<String> s){
+  static public boolean literalIsNotProtected(ArrayList<String> s){
     int counter = 0;
     for(String p:s){
       if(isOperator(p))
@@ -172,8 +168,8 @@ public class Refutation {
     return false;
   }
 
-  static public List<String> equivautConvertor(List<String> A, List<String> B) {
-    List<String> result = new ArrayList<String>();
+  static public ArrayList<String> equivautConvertor(ArrayList<String> A, ArrayList<String> B) {
+    ArrayList<String> result = new ArrayList<String>();
     result.add("(");
     result.add("(");
     for(String s : A){result.add(s);}
@@ -190,8 +186,8 @@ public class Refutation {
     return result;
   }
 
-  static public List<String> impliqueConvertor(List<String> A, List<String> B){
-    List<String> result = new ArrayList<String>();
+  static public ArrayList<String> impliqueConvertor(ArrayList<String> A, ArrayList<String> B){
+    ArrayList<String> result = new ArrayList<String>();
     result.add("(");
     result.add("(");
     result.add("!");
@@ -203,15 +199,15 @@ public class Refutation {
     return result;
   }
 
-  static public List<String> elimineOperator(List<String> s, String op){
-    List<String> pr = new ArrayList<String>();
+  static public ArrayList<String> elimineOperator(ArrayList<String> s, String op){
+    ArrayList<String> pr = new ArrayList<String>();
     int i=0;
     while(i<s.size()){
       if(s.get(i).equals(op)){
-        List<String> A = backwardSlice(pr).keySet().stream().findFirst().get();
+        ArrayList<String> A = backwardSlice(pr).keySet().stream().findFirst().get();
         pr = backwardSlice(pr).values().stream().findFirst().get();
         i+=1;
-        List<String> B = forwardSlice(s, i).keySet().stream().findFirst().get();
+        ArrayList<String> B = forwardSlice(s, i).keySet().stream().findFirst().get();
         i = forwardSlice(s, i).values().stream().findFirst().get();
         A = elimineOperator(A, op);
         B = elimineOperator(B, op);
@@ -228,11 +224,11 @@ public class Refutation {
     return pr;
   }
 
-  static public List<String> moveNotInwards(List<String> s){
+  static public ArrayList<String> moveNotInwards(ArrayList<String> s){
     s = new ArrayList<String>(s);
-    List<String> pr = new ArrayList<String>();
-    List<String> B = new ArrayList<String>();
-    List<String> tmp = new ArrayList<String>();
+    ArrayList<String> pr = new ArrayList<String>();
+    ArrayList<String> B = new ArrayList<String>();
+    ArrayList<String> tmp = new ArrayList<String>();
     int i = 0;
     int j;
     while(true){
@@ -280,43 +276,105 @@ public class Refutation {
     return pr;
   }
 
-  static public List<String> distributeOrOverAnd(List<String> s){
-    try(PythonInterpreter py = new PythonInterpreter()){
-      py.exec("import sys");
-      py.exec("import os");
-      py.set("src", new PyString("src"));
-      py.set("main", new PyString("main"));
-      py.set("resources", new PyString("resources"));
-      py.exec("sys.path.append(os.path.join(os.getcwd(),src,main,resources))");
-      py.exec("from refutation import distribute_or_over_and");
-      py.set("s", new PyList(s)); 
-      py.exec("result = distribute_or_over_and(s)");
-      List<String> result = new PyList(py.get("result"));
-      return result;
+  static public ArrayList<String> distributeOrOverAnd(ArrayList<String> s){
+    ArrayList<String> processedSentence = new ArrayList<String>();
+    ArrayList<String> A = new ArrayList<String>();
+    ArrayList<String> B = new ArrayList<String>();
+    int i=0;
+    while(i<s.size()){
+      if(s.get(i).equals("|")){
+        A = backwardSlice(processedSentence).keySet().stream().findFirst().get();
+        processedSentence = backwardSlice(processedSentence).values().stream().findFirst().get();
+        A = distributeOrOverAnd(A);
+        ArrayList<ArrayList<String>> tmp3 = new ArrayList<ArrayList<String>>();
+        ArrayList<String> tmp = new ArrayList<String>();
+
+        if(A.get(0).equals("(")){
+          int j = 1;
+          while(j<A.size()-1){
+            tmp = forwardSlice(A, j).keySet().stream().findFirst().get();
+            j = forwardSlice(A, j).values().stream().findFirst().get();
+            tmp3.add(tmp);
+            j+=2;
+          }
+        }else{
+          tmp3.add(A);
+        }
+
+        i+=1;
+
+        assert i < s.size();
+
+        B = forwardSlice(s, i).keySet().stream().findFirst().get();
+        i = forwardSlice(s, i).values().stream().findFirst().get();
+        B = distributeOrOverAnd(B);
+
+        ArrayList<ArrayList<String>> tmp2 = new ArrayList<ArrayList<String>>();
+        if(B.get(0).equals("(")){
+          int j = 1;
+          while(j<B.size()-1){
+            tmp = forwardSlice(B, j).keySet().stream().findFirst().get();
+            j = forwardSlice(B, j).values().stream().findFirst().get();
+            tmp2.add(tmp);
+            j+=2;
+          }
+        }else{
+          tmp2.add(B);
+        }
+
+        for (int k=0;k<tmp2.size();k++ ) {
+         for (int m=0; m<tmp3.size();m++ ) {
+          processedSentence.add("("); 
+          processedSentence.addAll((ArrayList<String>)tmp3.get(m).clone());
+          processedSentence.add("|");
+          processedSentence.addAll((ArrayList<String>)tmp2.get(k).clone());
+          processedSentence.add(")");
+          if(m!=tmp3.size()-1){
+            processedSentence.add("&");
+          }
+         } 
+         if(k!=tmp2.size()-1){
+           processedSentence.add("&");
+         }
+        }
+      }else{
+        processedSentence.add(s.get(i));
+      }
+      i+=1;
     }
+    return processedSentence;
   }
 
 
 
-  static public List<String> eliminateInvalidParenthesis(List<String> s){
-    try(PythonInterpreter py = new PythonInterpreter()){
-      py.exec("import sys");
-      py.exec("import os");
-      py.set("src", new PyString("src"));
-      py.set("main", new PyString("main"));
-      py.set("resources", new PyString("resources"));
-      py.exec("sys.path.append(os.path.join(os.getcwd(),src,main,resources))");
-      py.exec("from refutation import eliminate_invalid_parenthesis");
-      py.set("s", new PyList(s));
-      py.exec("result = eliminate_invalid_parenthesis(s)");
-      List<String> result = new PyList(py.get("result"));
-      return result;
-    }  
+  static public ArrayList<String> eliminateInvalidParenthesis(ArrayList<String> s){
+    ArrayList<String> processedSentence = new ArrayList<String>();
+    ArrayList<String> brackets = new ArrayList<String>();
+    ArrayList<ArrayList<String>> content = new ArrayList<ArrayList<String>>();
+
+    for(int i=0; i<s.size(); i++){
+      if(s.get(i).equals("(")){
+        content.add((ArrayList<String>)processedSentence.clone());
+        brackets.add("(");
+        processedSentence.clear();
+      }else if(s.get(i).equals(")") && content.size()>=1){
+        if(literalIsNotProtected(processedSentence)){
+          processedSentence.add(0, "(");
+          processedSentence.add(processedSentence.size(), ")");
+        }
+        processedSentence.addAll(0, (ArrayList<String>)content.get(content.size()-1).clone());
+        brackets.remove(brackets.size()-1);
+        content.remove(content.size()-1);
+      }else{
+        processedSentence.add(s.get(i));
+      }
+    }
+    return processedSentence;  
   }
 
-  static public List<String> processOperand(List<String> s){
+  static public ArrayList<String> processOperand(ArrayList<String> s){
     s = eliminateInvalidParenthesis(s);
-    List<String> result = new ArrayList<String>();
+    ArrayList<String> result = new ArrayList<String>();
     if(s.get(0).equals("(")){
       result.add("(");
       for(String j:s){
@@ -337,10 +395,10 @@ public class Refutation {
   }
 
 
-  static public List<String> splitAroundAnd(List<String> s){
-    List<String> pr = new ArrayList<String>();
-    List<String> operand = new ArrayList<String>();
-    List<String> result = new ArrayList<String>();
+  static public ArrayList<String> splitAroundAnd(ArrayList<String> s){
+    ArrayList<String> pr = new ArrayList<String>();
+    ArrayList<String> operand = new ArrayList<String>();
+    ArrayList<String> result = new ArrayList<String>();
 
     for(int i=0; i<s.size(); i++){
       if(s.get(i).equals("&")){
@@ -358,7 +416,7 @@ public class Refutation {
     return result;
   }
 
-  static public List<String> cNF(List<String> s){
+  static public ArrayList<String> cNF(ArrayList<String> s){
     s = elimineOperator(s, "=");
     s = eliminateInvalidParenthesis(s); 
     s = elimineOperator(s, ">");
@@ -366,7 +424,7 @@ public class Refutation {
     s = moveNotInwards(s);
     s = eliminateInvalidParenthesis(s);
 
-    List<String> prev = new ArrayList<String>();
+    ArrayList<String> prev = new ArrayList<String>();
     while(!prev.equals(s)){
       prev = s;
       s = distributeOrOverAnd(s);
@@ -376,9 +434,9 @@ public class Refutation {
     return splitAroundAnd(s);
   } 
 
-  static public HashMap<String, Boolean> clauseMap(List<String> s) {
+  static public HashMap<String, Boolean> clauseMap(ArrayList<String> s) {
     HashMap<String, Boolean> map = new HashMap<String, Boolean>();
-    List<String> literal = new ArrayList<String>();
+    ArrayList<String> literal = new ArrayList<String>();
     int j,L;
     if(s.get(0).equals("(")){
       j = 1;
@@ -406,7 +464,7 @@ public class Refutation {
     return map;
   }
 
-  static public Boolean all(List<HashMap<String,Boolean>> clause_map, List<HashMap<String,Boolean>> new_clause_map){
+  static public Boolean all(ArrayList<HashMap<String,Boolean>> clause_map, ArrayList<HashMap<String,Boolean>> new_clause_map){
     for(HashMap<String,Boolean> clause: new_clause_map){
       if(!clause_map.contains(clause))
         return false;
@@ -414,8 +472,8 @@ public class Refutation {
     return true;
   }
 
-  static public List<String> convertToLogic(HashMap<String,Boolean> clause){
-    List<String> result = new ArrayList<String>();
+  static public ArrayList<String> convertToLogic(HashMap<String,Boolean> clause){
+    ArrayList<String> result = new ArrayList<String>();
     for (Map.Entry<String,Boolean> entry : clause.entrySet()) {
       if(entry.getValue()){
         result.add("non " + entry.getKey());
@@ -426,10 +484,10 @@ public class Refutation {
     return result;
   }
 
-  static public boolean resolve(List<String> s, int debugActive){
-    List<String> clause = new ArrayList<String>();
-    List<String> clauses = new ArrayList<String>();
-    List<HashMap<String, Boolean>> clause_map = new ArrayList<HashMap<String, Boolean>>();
+  static public boolean resolve(ArrayList<String> s, int debugActive){
+    ArrayList<String> clause = new ArrayList<String>();
+    ArrayList<String> clauses = new ArrayList<String>();
+    ArrayList<HashMap<String, Boolean>> clause_map = new ArrayList<HashMap<String, Boolean>>();
     boolean m;
 
     try {
@@ -458,7 +516,7 @@ public class Refutation {
       clauses.add(complete);
       clause_map.add(clauseMap(clause));
       
-      List<HashMap<String, Boolean>> new_clause_map = new ArrayList<HashMap<String, Boolean>>();
+      ArrayList<HashMap<String, Boolean>> new_clause_map = new ArrayList<HashMap<String, Boolean>>();
 
       if (m) {
         out.println("On converti l'ensemble des clauses dans leur forme normale (CNF)");
@@ -522,7 +580,7 @@ public class Refutation {
     
   }
 
-  static public List<String> vetSentence(List<String> s){
+  static public ArrayList<String> vetSentence(ArrayList<String> s){
     s = induceParenthesis(s); 
     s = eliminateInvalidParenthesis(s);
     return cNF(s);
@@ -530,25 +588,25 @@ public class Refutation {
   }
   
 
-  static public int solve(Integer m, List<String> sentences, String query){
+  static public int solve(Integer m, ArrayList<String> sentences, String query){
 
-    List<String> baseDeConnaissance = new ArrayList<String>();
+    ArrayList<String> baseDeConnaissance = new ArrayList<String>();
     for (String sentence : sentences){
-      List<String> Lsentence = vetSentence(segmentSentence(sentence));
+      ArrayList<String> Lsentence = vetSentence(segmentSentence(sentence));
       for(String k:Lsentence){baseDeConnaissance.add(k);}
       baseDeConnaissance.add("&");
     } 
     baseDeConnaissance.remove(baseDeConnaissance.size()-1);
 
-    List<String> Lquery = vetSentence(segmentSentence(query));
+    ArrayList<String> Lquery = vetSentence(segmentSentence(query));
 
-    List<String> oppose = new ArrayList<String>();
+    ArrayList<String> oppose = new ArrayList<String>();
     oppose.add("!");
     for (String k : Lquery) {
       oppose.add(k);
     }
 
-    List<String> old = new ArrayList<String>(oppose);
+    ArrayList<String> old = new ArrayList<String>(oppose);
     if(baseDeConnaissance.size() > 0){
       for (String k : baseDeConnaissance) {
         oppose.add(k);

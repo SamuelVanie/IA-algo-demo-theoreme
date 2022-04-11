@@ -69,7 +69,7 @@ public class FXMLController {
 
         if (input.getText() != null && input.getText().toString().length() != 0) {
             Integer n = Integer.parseInt(input.getText().toString());
-            List<String> clauses = new ArrayList<String>();
+            ArrayList<String> clauses = new ArrayList<String>();
             for (int i=0; i<n; i++) {
                 textInput.getDialogPane().setContentText("Entrez la clause numéro " + (i+1));
                 result = textInput.showAndWait();
