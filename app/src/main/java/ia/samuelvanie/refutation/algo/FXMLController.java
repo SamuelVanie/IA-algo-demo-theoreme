@@ -68,45 +68,51 @@ public class FXMLController {
         TextField input = textInput.getEditor();
 
         if (input.getText() != null && input.getText().toString().length() != 0) {
-            Integer n = Integer.parseInt(input.getText().toString());
-            ArrayList<String> clauses = new ArrayList<String>();
-            for (int i=0; i<n; i++) {
-                textInput.getDialogPane().setContentText("Entrez la clause numéro " + (i+1));
+            try{
+                Integer n = Integer.parseInt(input.getText().toString());
+                ArrayList<String> clauses = new ArrayList<String>();
+                for (int i=0; i<n; i++) {
+                    textInput.getDialogPane().setContentText("Entrez la clause numéro " + (i+1));
+                    result = textInput.showAndWait();
+                    input = textInput.getEditor();
+                    if (input.getText() != null && input.getText().toString().length() != 0) {
+                       clauses.add(input.getText().toString().split(" ")[0]); 
+                    }else{
+                        textInput.setResult("Clause vide");
+                        textInput.close();
+                    }
+                }
+                textInput.getDialogPane().setContentText("Quelle propriété voulez-vous vérifier?");
+                result = textInput.showAndWait();
+                input = textInput.getEditor();
+                String query = new String();
+                if (input.getText() != null && input.getText().toString().length() != 0) {
+                    query = input.getText().toString().split(" ")[0];
+                }else{
+                    textInput.setResult("Champ vide");
+                    textInput.close();
+                }
+
+                textInput.getDialogPane().setContentText("Voulez-vous afficher la trace du raisonnement ? (OUI:O) ou (NON:N)");
                 result = textInput.showAndWait();
                 input = textInput.getEditor();
                 if (input.getText() != null && input.getText().toString().length() != 0) {
-                   clauses.add(input.getText().toString().split(" ")[0]); 
+                    String answer = input.getText().toString().split(" ")[0];
+                    Integer m;
+                    if(answer.equals("O") || answer.equals("o"))
+                        m = 1;
+                    else
+                        m = 0;
+                    solve(m, clauses, query);
+                    fetchResultFile();
                 }else{
-                    textInput.setResult("Clause vide");
+                    textInput.setResult("Champ vide");
                     textInput.close();
                 }
-            }
-            textInput.getDialogPane().setContentText("Quelle propriété voulez-vous vérifier?");
-            result = textInput.showAndWait();
-            input = textInput.getEditor();
-            String query = new String();
-            if (input.getText() != null && input.getText().toString().length() != 0) {
-                query = input.getText().toString().split(" ")[0];
-            }else{
-                textInput.setResult("Champ vide");
+            }catch(NumberFormatException e){
                 textInput.close();
-            }
-
-            textInput.getDialogPane().setContentText("Voulez-vous afficher la trace du raisonnement ? (OUI:O) ou (NON:N)");
-            result = textInput.showAndWait();
-            input = textInput.getEditor();
-            if (input.getText() != null && input.getText().toString().length() != 0) {
-                String answer = input.getText().toString().split(" ")[0];
-                Integer m;
-                if(answer.equals("O") || answer.equals("o"))
-                    m = 1;
-                else
-                    m = 0;
-                solve(m, clauses, query);
-                fetchResultFile();
-            }else{
-                textInput.setResult("Champ vide");
-                textInput.close();
+                textArea.clear();
+                textArea.setText("Vous avez entrée une mauvaise donnée");
             }
             
         }else{
